@@ -3,11 +3,11 @@ package domain
 import "github.com/sMARCHz/microservices-go/errs"
 
 type Customer struct {
-	Id          string `json:"customer_id"`
+	Id          string `json:"customer_id" db:"customer_id"`
 	Name        string `json:"full_name"`
 	City        string `json:"city"`
 	Zipcode     string `json:"zip_code"`
-	DateofBirth string `json:"date_of_birth"`
+	DateofBirth string `json:"date_of_birth" db:"date_of_birth"`
 	Status      string `json:"status"`
 }
 
