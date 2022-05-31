@@ -20,7 +20,7 @@ func (c CustomerRepositoryDb) FindAll() ([]Customer, *errs.AppError) {
 	// If the fields don't match with database column, we need to define db tag in the domain
 	err := c.client.Select(&customers, findAllSql)
 	if err != nil {
-		logger.Error("Error while querying customer table - " + err.Error())
+		logger.Error("Error while querying customer - " + err.Error())
 		return nil, errs.NewUnexpectedError("Unexpected database error")
 	}
 
@@ -42,7 +42,7 @@ func (c CustomerRepositoryDb) FindById(id string) (*Customer, *errs.AppError) {
 		if err == sql.ErrNoRows {
 			return nil, errs.NewNotFoundError("Customer not found")
 		} else {
-			logger.Error("Error while scanning customers - " + err.Error())
+			logger.Error("Error while querying customer - " + err.Error())
 			return nil, errs.NewUnexpectedError("Unexpected database error")
 		}
 	}
@@ -55,7 +55,7 @@ func (c CustomerRepositoryDb) FindByStatus(status string) ([]Customer, *errs.App
 
 	err := c.client.Select(&customers, findByStatusSql, status)
 	if err != nil {
-		logger.Error("Error while querying customer table - " + err.Error())
+		logger.Error("Error while querying customer - " + err.Error())
 		return nil, errs.NewUnexpectedError("Unexpected database error")
 	}
 	return customers, nil

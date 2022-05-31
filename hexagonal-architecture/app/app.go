@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,11 +23,17 @@ func Start() {
 	// Wiring
 	dbClient := getDbClient()
 	customerRepository := domain.NewCustomerRepositoryDb(dbClient)
+	accountRepository := domain.NewAccountRepositoryDb(dbClient)
 	ch := CustomerHandler{services.NewCustomerService(customerRepository)}
+	ah := AccountHandler{services.NewAccountService(accountRepository)}
 
+	// * Customer
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
 	router.HandleFunc("/customers", ch.createCustomer).Methods(http.MethodPost)
-	router.HandleFunc("/customers/{id:[0-9]+}", ch.getCustomerById).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}", ch.getCustomerById).Methods(http.MethodGet)
+	// * Account
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/accounts", ah.createAccount).Methods(http.MethodPost)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}/accounts/{account_id:[0-9]+}", ah.MakeTransaction).Methods(http.MethodPost)
 
 	address := os.Getenv("SERVER_ADDRESS")
 	port := os.Getenv("SERVER_PORT")
@@ -65,4 +72,10 @@ func getDbClient() *sqlx.DB {
 	client.SetMaxOpenConns(10)
 	client.SetMaxIdleConns(10)
 	return client
+}
+
+func writeResponse(w http.ResponseWriter, statusCode int, data interface{}) {
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	json.NewEncoder(w).Encode(data)
 }
