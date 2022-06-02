@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"github.com/sMARCHz/microservices-go/dto"
-	"github.com/sMARCHz/microservices-go/errs"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/dto"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
 )
 
 type Account struct {

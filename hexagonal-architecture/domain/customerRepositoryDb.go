@@ -5,8 +5,8 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/microservices-go/errs"
-	"github.com/sMARCHz/microservices-go/logger"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/logger"
 )
 
 type CustomerRepositoryDb struct {

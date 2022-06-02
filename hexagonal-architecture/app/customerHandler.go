@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/sMARCHz/microservices-go/services"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/services"
 )
 
 type CustomerHandler struct {

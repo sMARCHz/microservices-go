@@ -3,9 +3,9 @@ package services
 import (
 	"time"
 
-	"github.com/sMARCHz/microservices-go/domain"
-	"github.com/sMARCHz/microservices-go/dto"
-	"github.com/sMARCHz/microservices-go/errs"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/domain"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/dto"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
 )
 
 type AccountService interface {

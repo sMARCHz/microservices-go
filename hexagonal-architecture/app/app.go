@@ -10,9 +10,9 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/microservices-go/domain"
-	"github.com/sMARCHz/microservices-go/logger"
-	"github.com/sMARCHz/microservices-go/services"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/domain"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/logger"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/services"
 )
 
 func Start() {

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/sMARCHz/microservices-go/app"
-	"github.com/sMARCHz/microservices-go/logger"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/app"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/logger"
 )
 
 func main() {

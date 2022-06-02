@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/sMARCHz/microservices-go/errs"
+	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
 )
 
 type NewAccountRequest struct {

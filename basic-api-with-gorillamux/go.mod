@@ -1,4 +1,4 @@
-module github.com/sMARCHz/microservices-go
+module github.com/sMARCHz/microservices-go/basic-api-with-gorillamux
 
 go 1.18
 
