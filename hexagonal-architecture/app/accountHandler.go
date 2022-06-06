@@ -14,32 +14,31 @@ type AccountHandler struct {
 }
 
 func (a AccountHandler) createAccount(w http.ResponseWriter, r *http.Request) {
-	var request dto.NewAccountRequest
+	var req dto.NewAccountRequest
 	var customerId = mux.Vars(r)["customer_id"]
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeResponse(w, http.StatusBadRequest, err.Error())
 	} else {
-		request.CustomerId = customerId
-		if account, appError := a.service.CreateAccount(request); appError != nil {
-			writeResponse(w, appError.Code, appError)
+		req.CustomerId = customerId
+		if account, appErr := a.service.CreateAccount(req); appErr != nil {
+			writeResponse(w, appErr.Code, appErr)
 		} else {
 			writeResponse(w, http.StatusCreated, account)
 		}
 	}
 }
 
-func (a AccountHandler) MakeTransaction(w http.ResponseWriter, r *http.Request) {
-	var request dto.TransactionRequest
+func (a AccountHandler) makeTransaction(w http.ResponseWriter, r *http.Request) {
+	var req dto.TransactionRequest
 	var customerId = mux.Vars(r)["customer_id"]
 	var accountId = mux.Vars(r)["account_id"]
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeResponse(w, http.StatusBadRequest, err.Error())
 	} else {
-		request.CustomerId = customerId
-		request.AccountId = accountId
-		response, err := a.service.MakeTransaction(request)
-		if err != nil {
-			writeResponse(w, err.Code, err)
+		req.CustomerId = customerId
+		req.AccountId = accountId
+		if response, appErr := a.service.MakeTransaction(req); appErr != nil {
+			writeResponse(w, appErr.Code, appErr)
 		} else {
 			writeResponse(w, http.StatusOK, response)
 		}

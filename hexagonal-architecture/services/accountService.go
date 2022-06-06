@@ -56,11 +56,11 @@ func (a AccountServiceImpl) MakeTransaction(req dto.TransactionRequest) (*dto.Tr
 		TransactionDate: time.Now().Format("2006-01-02 15:04:05"),
 	}
 
-	transaction, balance, err := a.repo.SaveTransaction(t)
-	if err != nil {
+	if transaction, balance, err := a.repo.SaveTransaction(t); err != nil {
 		return nil, err
+	} else {
+		return transaction.ToResponseDto(*balance), nil
 	}
-	return &dto.TransactionResponse{TransactionId: transaction.TransactionId, Balance: *balance}, nil
 }
 
 func NewAccountService(repository domain.AccountRepository) AccountServiceImpl {

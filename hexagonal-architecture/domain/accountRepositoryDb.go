@@ -53,16 +53,20 @@ func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *floa
 	}
 
 	// Insert transaction
-	transactionSql := "INSERT INTO account (account_id, amount, transactionType, transactionDate) VALUES(?, ?, ?, ?)"
-	result, _ := tx.Exec(transactionSql, t.AccountId, t.Amount, t.TransactionType, t.TransactionDate)
+	transactionSql := "INSERT INTO transaction (account_id, amount, transaction_type, transaction_date) VALUES(?, ?, ?, ?)"
+	result, err := tx.Exec(transactionSql, t.AccountId, t.Amount, t.TransactionType, t.TransactionDate)
+	if err != nil {
+		logger.Error("Error while inserting transaction to the table for bank account transaction - " + err.Error())
+		return nil, nil, errs.NewUnexpectedError("Unexpected database error")
+	}
 
 	// Update balance
 	if t.IsWithdrawal() {
-		withDrawSql := "UPDATE TABLE account SET amount = amount - ? WHERE account_id = ?"
-		_, err = tx.Exec(withDrawSql, t.AccountId)
+		withDrawSql := "UPDATE account SET amount = amount - ? WHERE account_id = ?"
+		_, err = tx.Exec(withDrawSql, t.Amount, t.AccountId)
 	} else {
-		depositSql := "UPDATE TABLE account SET amount = amount + ? WHERE account_id = ?"
-		_, err = tx.Exec(depositSql, t.AccountId)
+		depositSql := "UPDATE account SET amount = amount + ? WHERE account_id = ?"
+		_, err = tx.Exec(depositSql, t.Amount, t.AccountId)
 	}
 	if err != nil {
 		tx.Rollback()
@@ -82,9 +86,9 @@ func (d AccountRepositoryDb) SaveTransaction(t Transaction) (*Transaction, *floa
 		logger.Error("Error while getting the last transaction id - " + err.Error())
 		return nil, nil, errs.NewUnexpectedError("Unexpected database error")
 	}
-	account, appError := d.FindById(t.AccountId)
-	if appError != nil {
-		return nil, nil, appError
+	account, appErr := d.FindById(t.AccountId)
+	if appErr != nil {
+		return nil, nil, appErr
 	}
 	t.TransactionId = strconv.FormatInt(transactionId, 10)
 	return &t, &account.Amount, nil
