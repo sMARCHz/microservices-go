@@ -11,11 +11,11 @@ type CustomerService interface {
 	GetCustomerById(string) (*dto.CustomerResponse, *errs.AppError)
 }
 
-type CustomerServiceImpl struct {
+type DefaultCustomerService struct {
 	repo domain.CustomerRepository
 }
 
-func (c CustomerServiceImpl) GetAllCustomers(status string) ([]dto.CustomerResponse, *errs.AppError) {
+func (c DefaultCustomerService) GetAllCustomers(status string) ([]dto.CustomerResponse, *errs.AppError) {
 	var customers []domain.Customer
 	var err *errs.AppError
 	if status == "active" {
@@ -36,7 +36,7 @@ func (c CustomerServiceImpl) GetAllCustomers(status string) ([]dto.CustomerRespo
 	return response, nil
 }
 
-func (c CustomerServiceImpl) GetCustomerById(id string) (*dto.CustomerResponse, *errs.AppError) {
+func (c DefaultCustomerService) GetCustomerById(id string) (*dto.CustomerResponse, *errs.AppError) {
 	customer, err := c.repo.FindById(id)
 	if err != nil {
 		return nil, err
@@ -45,6 +45,6 @@ func (c CustomerServiceImpl) GetCustomerById(id string) (*dto.CustomerResponse, 
 	return &response, nil
 }
 
-func NewCustomerService(repository domain.CustomerRepository) CustomerServiceImpl {
-	return CustomerServiceImpl{repository}
+func NewCustomerService(repository domain.CustomerRepository) DefaultCustomerService {
+	return DefaultCustomerService{repository}
 }

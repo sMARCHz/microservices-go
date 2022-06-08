@@ -13,11 +13,11 @@ type AccountService interface {
 	MakeTransaction(dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError)
 }
 
-type AccountServiceImpl struct {
+type DefaultAccountService struct {
 	repo domain.AccountRepository
 }
 
-func (a AccountServiceImpl) CreateAccount(req dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError) {
+func (a DefaultAccountService) CreateAccount(req dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError) {
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
@@ -35,7 +35,7 @@ func (a AccountServiceImpl) CreateAccount(req dto.NewAccountRequest) (*dto.NewAc
 	}
 }
 
-func (a AccountServiceImpl) MakeTransaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
+func (a DefaultAccountService) MakeTransaction(req dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError) {
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
@@ -63,6 +63,6 @@ func (a AccountServiceImpl) MakeTransaction(req dto.TransactionRequest) (*dto.Tr
 	}
 }
 
-func NewAccountService(repository domain.AccountRepository) AccountServiceImpl {
-	return AccountServiceImpl{repository}
+func NewAccountService(repository domain.AccountRepository) DefaultAccountService {
+	return DefaultAccountService{repository}
 }
