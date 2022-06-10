@@ -1,9 +1,9 @@
 package services
 
 import (
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/domain"
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/dto"
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/domain"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/dto"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/errs"
 )
 
 type CustomerService interface {

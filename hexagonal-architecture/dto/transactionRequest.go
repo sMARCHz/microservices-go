@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/errs"
 )
 
 type TransactionRequest struct {

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sMARCHz/microservices-go/jwt-auth/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
 )
 
 const TOKEN_DURATION = time.Hour

@@ -1,4 +1,4 @@
-module github.com/sMARCHz/microservices-go/hexagonal-architecture
+module github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture
 
 go 1.18
 

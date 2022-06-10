@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/dto"
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/errs"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/dto"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/errs"
 )
 
 type Customer struct {

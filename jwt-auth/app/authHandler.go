@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/sMARCHz/microservices-go/jwt-auth/dto"
-	"github.com/sMARCHz/microservices-go/jwt-auth/logger"
-	"github.com/sMARCHz/microservices-go/jwt-auth/services"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/dto"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/services"
 )
 
 type AuthHandler struct {

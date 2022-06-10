@@ -11,9 +11,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/microservices-go/jwt-auth/domain"
-	"github.com/sMARCHz/microservices-go/jwt-auth/logger"
-	"github.com/sMARCHz/microservices-go/jwt-auth/services"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/domain"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/services"
 )
 
 func Start() {

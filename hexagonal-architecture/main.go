@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/app"
-	"github.com/sMARCHz/microservices-go/hexagonal-architecture/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/app"
+	"github.com/sMARCHz/rest-based-microservices-go/hexagonal-architecture/logger"
 )
 
 func main() {

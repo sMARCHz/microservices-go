@@ -1,4 +1,4 @@
-module github.com/sMARCHz/microservices-go/jwt-auth
+module github.com/sMARCHz/rest-based-microservices-go/jwt-auth
 
 go 1.18
 

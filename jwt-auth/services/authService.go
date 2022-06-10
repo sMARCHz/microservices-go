@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/sMARCHz/microservices-go/jwt-auth/domain"
-	"github.com/sMARCHz/microservices-go/jwt-auth/dto"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/domain"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/dto"
 )
 
 type AuthService interface {
