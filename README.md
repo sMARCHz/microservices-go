@@ -5,6 +5,7 @@ You should learn
 - basic-api
 - basic-api-with-gorillamux
 - hexagonal-architecture
-- ... (coming soon)
+- jwt-auth
+- testing
 
 **respectively** for the most efficiency
