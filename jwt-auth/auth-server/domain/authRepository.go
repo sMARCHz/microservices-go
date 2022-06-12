@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
 )
 
 type AuthRepository interface {

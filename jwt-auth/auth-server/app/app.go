@@ -11,16 +11,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/domain"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/services"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/domain"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/services"
 )
 
 func Start() {
 	sanityCheck()
 	router := mux.NewRouter()
 	authRepository := domain.NewAuthRepository(getDbClient())
-	ah := AuthHandler{services.NewAuthService(authRepository)}
+	ah := AuthHandler{services.NewAuthService(authRepository, domain.GetRolePermissions())}
 
 	router.HandleFunc("/auth/login", ah.Login).Methods(http.MethodPost)
 	router.HandleFunc("/auth/register", ah.NotImplementedHandler).Methods(http.MethodPost)
@@ -41,6 +41,7 @@ func sanityCheck() {
 		"DB_HOST",
 		"DB_PORT",
 		"DB_NAME",
+		"JWT_SECRET",
 	}
 	for _, k := range envProps {
 		if os.Getenv(k) == "" {

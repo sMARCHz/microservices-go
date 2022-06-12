@@ -1,22 +1,22 @@
 package domain
 
 import (
+	"database/sql"
 	"errors"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/logger"
+	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
 )
 
 const TOKEN_DURATION = time.Hour
-const HMAC_SAMPLE_SECRET = "hmacSampleSecret"
 
 type UserDetail struct {
-	Username   string `db:"username"`
-	CustomerId string `db:"customer_id"`
-	Accounts   string `db:"account_numbers"`
-	Role       string `db:"role"`
+	Username   string         `db:"username"`
+	CustomerId sql.NullString `db:"customer_id"`
+	Accounts   sql.NullString `db:"account_numbers"`
+	Role       string         `db:"role"`
 }
 
 func (u UserDetail) GenerateToken() (*string, error) {
@@ -37,9 +37,9 @@ func (u UserDetail) GenerateToken() (*string, error) {
 }
 
 func (u UserDetail) claimsForUser() jwt.MapClaims {
-	accounts := strings.Split(u.Accounts, ",")
+	accounts := strings.Split(u.Accounts.String, ",")
 	return jwt.MapClaims{
-		"customer_id": u.CustomerId,
+		"customer_id": u.CustomerId.String,
 		"role":        u.Role,
 		"username":    u.Username,
 		"accounts":    accounts,
