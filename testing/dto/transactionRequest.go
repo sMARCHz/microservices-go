@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 )
 
 const WITHDRAWAL = "withdrawal"

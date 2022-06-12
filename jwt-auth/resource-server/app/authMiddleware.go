@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/domain"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/errs"
 )
 
 type AuthMiddleware struct {

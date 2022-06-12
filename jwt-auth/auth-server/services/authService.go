@@ -1,17 +1,16 @@
 package services
 
 import (
-	"errors"
-
 	"github.com/dgrijalva/jwt-go"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/domain"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
 )
 
 type AuthService interface {
-	Login(dto.LoginRequest) (*string, error)
-	Verify(urlParams map[string]string) (bool, error)
+	Login(dto.LoginRequest) (*string, *errs.AppError)
+	Verify(urlParams map[string]string) (bool, *errs.AppError)
 }
 
 type DefaultAuthService struct {
@@ -19,7 +18,7 @@ type DefaultAuthService struct {
 	rolePermissions domain.RolePermissions
 }
 
-func (a DefaultAuthService) Login(req dto.LoginRequest) (*string, error) {
+func (a DefaultAuthService) Login(req dto.LoginRequest) (*string, *errs.AppError) {
 	// Get the user detail if user is validated
 	user, err := a.repo.ValidateUser(req.Username, req.Password)
 	if err != nil {
@@ -32,21 +31,21 @@ func (a DefaultAuthService) Login(req dto.LoginRequest) (*string, error) {
 	return token, nil
 }
 
-func (a DefaultAuthService) Verify(urlParams map[string]string) (bool, error) {
+func (a DefaultAuthService) Verify(urlParams map[string]string) (bool, *errs.AppError) {
 	// Parse token from params to jwt.Token
 	if jwtToken, err := jwtTokenFromString(urlParams["token"]); err != nil {
-		return false, err
+		return false, errs.NewAuthorizationError(err.Error())
 	} else {
 		if jwtToken.Valid {
 			mapClaims := jwtToken.Claims.(jwt.MapClaims)
 			// Build domain.Claims from jwt.MapClaims
 			if claims, err := domain.BuildClaimsFromJwtMapClaims(mapClaims); err != nil {
-				return false, err
+				return false, errs.NewAuthorizationError(err.Error())
 			} else {
 				if claims.IsUserRole() {
 					// Check if token is belonged to its user (same customer_id)
 					if !claims.IsRequestVerifiedWithTokenClaims(urlParams) {
-						return false, nil
+						return false, errs.NewAuthorizationError("request not verified with the token claims")
 					}
 				}
 				// Check if user have permissions to the resource
@@ -54,7 +53,7 @@ func (a DefaultAuthService) Verify(urlParams map[string]string) (bool, error) {
 				return isAuthorized, nil
 			}
 		} else {
-			return false, errors.New("invalid token")
+			return false, errs.NewAuthorizationError("invalid token")
 		}
 	}
 }

@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/logger"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 )
 
 type AccountRepositoryDb struct {

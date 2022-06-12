@@ -7,8 +7,8 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/gorilla/mux"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/mocks/services"
 )
 

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 )
 
 var HMAC_SAMPLE_SECRET = os.Getenv("JWT_SECRET")

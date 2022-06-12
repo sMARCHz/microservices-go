@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/sMARCHz/rest-based-microservices-go/testing/logger"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 )
 
 type AuthRepository interface {

@@ -3,9 +3,9 @@ package services
 import (
 	"time"
 
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/domain"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/errs"
 )
 
 type AccountService interface {

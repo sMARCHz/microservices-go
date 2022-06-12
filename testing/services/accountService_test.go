@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/golang/mock/gomock"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	realdomain "github.com/sMARCHz/rest-based-microservices-go/testing/domain"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/mocks/domain"
 )
 

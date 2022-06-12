@@ -3,9 +3,9 @@ package services
 import (
 	"time"
 
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/domain"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
 )
 
 const dbTSLayout = "2006-01-02 15:04:05"

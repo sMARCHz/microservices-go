@@ -9,7 +9,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	dto "github.com/sMARCHz/rest-based-microservices-go/testing/dto"
-	errs "github.com/sMARCHz/rest-based-microservices-go/testing/errs"
+	errs "github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 )
 
 // MockCustomerService is a mock of CustomerService interface.

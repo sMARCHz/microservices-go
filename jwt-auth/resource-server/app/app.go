@@ -10,8 +10,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/domain"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/logger"
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/services"
 )
 

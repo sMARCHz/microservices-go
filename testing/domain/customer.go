@@ -1,8 +1,8 @@
 package domain
 
 import (
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 	"github.com/sMARCHz/rest-based-microservices-go/testing/dto"
-	"github.com/sMARCHz/rest-based-microservices-go/testing/errs"
 )
 
 type Customer struct {

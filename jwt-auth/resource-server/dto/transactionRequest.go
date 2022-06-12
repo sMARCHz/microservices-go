@@ -3,7 +3,7 @@ package dto
 import (
 	"strings"
 
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/errs"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 )
 
 type TransactionRequest struct {

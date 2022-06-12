@@ -9,7 +9,7 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	domain "github.com/sMARCHz/rest-based-microservices-go/testing/domain"
-	errs "github.com/sMARCHz/rest-based-microservices-go/testing/errs"
+	errs "github.com/sMARCHz/rest-based-microservices-go-lib/errs"
 )
 
 // MockAccountRepository is a mock of AccountRepository interface.

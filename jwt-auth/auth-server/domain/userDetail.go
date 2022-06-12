@@ -2,12 +2,12 @@ package domain
 
 import (
 	"database/sql"
-	"errors"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/auth-server/logger"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/errs"
+	"github.com/sMARCHz/rest-based-microservices-go-lib/logger"
 )
 
 const TOKEN_DURATION = time.Hour
@@ -19,7 +19,7 @@ type UserDetail struct {
 	Role       string         `db:"role"`
 }
 
-func (u UserDetail) GenerateToken() (*string, error) {
+func (u UserDetail) GenerateToken() (*string, *errs.AppError) {
 	var claims jwt.MapClaims
 	if u.Role == "admin" {
 		claims = u.claimsForAdmin()
@@ -31,7 +31,7 @@ func (u UserDetail) GenerateToken() (*string, error) {
 	signedTokenAsString, err := token.SignedString([]byte(HMAC_SAMPLE_SECRET))
 	if err != nil {
 		logger.Error("Failed while signing token: " + err.Error())
-		return nil, errors.New("cannot generate token")
+		return nil, errs.NewUnexpectedError("cannot generate token")
 	}
 	return &signedTokenAsString, nil
 }
