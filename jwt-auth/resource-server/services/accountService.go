@@ -8,6 +8,8 @@ import (
 	"github.com/sMARCHz/rest-based-microservices-go/jwt-auth/resource-server/dto"
 )
 
+const dbTSLayout = "2006-01-02 15:04:05"
+
 type AccountService interface {
 	CreateAccount(dto.NewAccountRequest) (*dto.NewAccountResponse, *errs.AppError)
 	MakeTransaction(dto.TransactionRequest) (*dto.TransactionResponse, *errs.AppError)
@@ -23,7 +25,7 @@ func (a DefaultAccountService) CreateAccount(req dto.NewAccountRequest) (*dto.Ne
 	}
 	account := domain.Account{
 		CustomerId:  req.CustomerId,
-		OpeningDate: time.Now().Format("2006-01-02 15:04:05"),
+		OpeningDate: time.Now().Format(dbTSLayout),
 		AccountType: req.AccountType,
 		Amount:      req.Amount,
 		Status:      "1",
@@ -53,7 +55,7 @@ func (a DefaultAccountService) MakeTransaction(req dto.TransactionRequest) (*dto
 		AccountId:       req.AccountId,
 		Amount:          req.Amount,
 		TransactionType: req.TransactionType,
-		TransactionDate: time.Now().Format("2006-01-02 15:04:05"),
+		TransactionDate: time.Now().Format(dbTSLayout),
 	}
 
 	if transaction, balance, err := a.repo.SaveTransaction(t); err != nil {
