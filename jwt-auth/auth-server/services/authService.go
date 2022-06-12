@@ -11,7 +11,7 @@ import (
 )
 
 type AuthService interface {
-	Login(dto.LoginRequest) (*string, *errs.AppError)
+	Login(dto.LoginRequest) (*dto.LoginResponse, *errs.AppError)
 	Verify(urlParams map[string]string) *errs.AppError
 }
 
@@ -20,24 +20,29 @@ type DefaultAuthService struct {
 	rolePermissions domain.RolePermissions
 }
 
-func (a DefaultAuthService) Login(req dto.LoginRequest) (*string, *errs.AppError) {
-	// Get the user detail if user is validated
-	user, err := a.repo.ValidateUser(req.Username, req.Password)
-	if err != nil {
-		return nil, err
+func (a DefaultAuthService) Login(req dto.LoginRequest) (*dto.LoginResponse, *errs.AppError) {
+	var login *domain.Login
+	var appErr *errs.AppError
+	// Get the user detail in the database
+	if login, appErr = a.repo.ValidateUser(req.Username, req.Password); appErr != nil {
+		return nil, appErr
 	}
-	token, err := user.GenerateToken()
-	if err != nil {
-		return nil, err
+
+	claims := login.ClaimsForAccessToken()
+	authToken := domain.NewAuthToken(claims)
+
+	var accessToken string
+	if accessToken, appErr = authToken.NewAccessToken(); appErr != nil {
+		return nil, appErr
 	}
-	return token, nil
+	return &dto.LoginResponse{AccessToken: accessToken}, nil
 }
 
 func (a DefaultAuthService) Verify(urlParams map[string]string) *errs.AppError {
 	if err := validateUrlParams(urlParams); err != nil {
 		return err
 	}
-	// Parse token from params to jwt.Token
+	// Parse string to token
 	if jwtToken, err := jwtTokenFromString(urlParams["token"]); err != nil {
 		return errs.NewAuthorizationError(err.Error())
 	} else {

@@ -9,21 +9,21 @@ import (
 )
 
 type AuthRepository interface {
-	ValidateUser(string, string) (*UserDetail, *errs.AppError)
+	ValidateUser(string, string) (*Login, *errs.AppError)
 }
 
 type AuthRepositoryDb struct {
 	client *sqlx.DB
 }
 
-func (a AuthRepositoryDb) ValidateUser(username, password string) (*UserDetail, *errs.AppError) {
-	var user UserDetail
+func (a AuthRepositoryDb) ValidateUser(username, password string) (*Login, *errs.AppError) {
+	var login Login
 	validateUserSql := `SELECT username, u.customer_id, role, GROUP_CONCAT(a.account_id) AS account_numbers FROM user u
 					LEFT JOIN account a
 					ON a.customer_id = u.customer_id
 					WHERE username = ? and password = ?
 					GROUP BY username, customer_id, role`
-	if err := a.client.Get(&user, validateUserSql, username, password); err != nil {
+	if err := a.client.Get(&login, validateUserSql, username, password); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errs.NewAuthenticationError("invalid credentials")
 		} else {
@@ -31,7 +31,7 @@ func (a AuthRepositoryDb) ValidateUser(username, password string) (*UserDetail, 
 			return nil, errs.NewUnexpectedError("unexpected database error")
 		}
 	}
-	return &user, nil
+	return &login, nil
 }
 
 func NewAuthRepository(client *sqlx.DB) AuthRepositoryDb {
