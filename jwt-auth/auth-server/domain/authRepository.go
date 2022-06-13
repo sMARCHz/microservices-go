@@ -10,6 +10,8 @@ import (
 
 type AuthRepository interface {
 	ValidateUser(string, string) (*Login, *errs.AppError)
+	GenerateAndSaveRefreshToken(AuthToken) (string, *errs.AppError)
+	IsRefreshTokenExisted(string) *errs.AppError
 }
 
 type AuthRepositoryDb struct {
@@ -32,6 +34,37 @@ func (a AuthRepositoryDb) ValidateUser(username, password string) (*Login, *errs
 		}
 	}
 	return &login, nil
+}
+
+func (a AuthRepositoryDb) GenerateAndSaveRefreshToken(authToken AuthToken) (string, *errs.AppError) {
+	// Generate refresh token
+	var refreshToken string
+	var appErr *errs.AppError
+	if refreshToken, appErr = authToken.generateRefreshToken(); appErr != nil {
+		return "", appErr
+	}
+	// Save refresh token
+	insertRefreshTokenSql := "INSERT INTO refresh_token_store (refresh_token) VALUES (?)"
+	if _, err := a.client.Exec(insertRefreshTokenSql, refreshToken); err != nil {
+		logger.Error("unexpected database error: " + err.Error())
+		return "", errs.NewUnexpectedError("unexpected database error")
+	}
+	return refreshToken, nil
+}
+
+func (a AuthRepositoryDb) IsRefreshTokenExisted(refreshToken string) *errs.AppError {
+	selectSql := "SELECT refresh_token FROM refresh_token_store WHERE refresh_token = ?"
+	var token string
+	err := a.client.Get(&token, selectSql, refreshToken)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return errs.NewAuthenticationError("refresh token isn't registered in the store")
+		} else {
+			logger.Error("unexpected database error: " + err.Error())
+			return errs.NewUnexpectedError("unexpected database error")
+		}
+	}
+	return nil
 }
 
 func NewAuthRepository(client *sqlx.DB) AuthRepositoryDb {

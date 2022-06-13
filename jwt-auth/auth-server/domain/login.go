@@ -9,6 +9,7 @@ import (
 )
 
 const TOKEN_DURATION = time.Hour
+const REFRESH_TOKEN_DURATION = time.Hour * 24 * 30
 
 type Login struct {
 	Username   string         `db:"username"`
@@ -17,7 +18,7 @@ type Login struct {
 	Role       string         `db:"role"`
 }
 
-func (l Login) ClaimsForAccessToken() Claims {
+func (l Login) ClaimsForAccessToken() AccessTokenClaims {
 	if l.Role == "admin" {
 		return l.claimsForAdmin()
 	} else {
@@ -25,9 +26,9 @@ func (l Login) ClaimsForAccessToken() Claims {
 	}
 }
 
-func (l Login) claimsForUser() Claims {
+func (l Login) claimsForUser() AccessTokenClaims {
 	accounts := strings.Split(l.Accounts.String, ",")
-	return Claims{
+	return AccessTokenClaims{
 		CustomerId: l.CustomerId.String,
 		Accounts:   accounts,
 		Username:   l.Username,
@@ -38,8 +39,8 @@ func (l Login) claimsForUser() Claims {
 	}
 }
 
-func (l Login) claimsForAdmin() Claims {
-	return Claims{
+func (l Login) claimsForAdmin() AccessTokenClaims {
+	return AccessTokenClaims{
 		Username: l.Username,
 		Role:     l.Role,
 		StandardClaims: jwt.StandardClaims{

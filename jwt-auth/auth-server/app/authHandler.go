@@ -32,7 +32,7 @@ func (a AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h AuthHandler) Verify(w http.ResponseWriter, r *http.Request) {
+func (a AuthHandler) Verify(w http.ResponseWriter, r *http.Request) {
 	urlParams := make(map[string]string)
 
 	// converting from Query to map type
@@ -40,11 +40,26 @@ func (h AuthHandler) Verify(w http.ResponseWriter, r *http.Request) {
 		urlParams[k] = r.URL.Query().Get(k)
 	}
 
-	appErr := h.service.Verify(urlParams)
+	appErr := a.service.Verify(urlParams)
 	if appErr != nil {
 		writeResponse(w, appErr.Code, unAuthorizedResponse(appErr.Message))
 	} else {
 		writeResponse(w, http.StatusOK, authorizedResponse())
+	}
+}
+
+func (a AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
+	var refreshTokenRequest dto.RefreshTokenRequest
+	if err := json.NewDecoder(r.Body).Decode(&refreshTokenRequest); err != nil {
+		logger.Error("Error while decoding refresh request: " + err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+	} else {
+		token, appErr := a.service.Refresh(refreshTokenRequest)
+		if appErr != nil {
+			writeResponse(w, appErr.Code, appErr)
+		} else {
+			writeResponse(w, http.StatusOK, *token)
+		}
 	}
 }
 

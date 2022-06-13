@@ -24,6 +24,10 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sMARCHz/rest-based-microservices-go-lib v1.1.0 h1:3G39SvDlUJSKB9NvOm2O43D4jQGrFwD6S3N55NguFxI=
 github.com/sMARCHz/rest-based-microservices-go-lib v1.1.0/go.mod h1:GJVzGNmIBLczdGGO9kU3ZTdWZizDChMGD4OYqLbgQ2w=
+github.com/sMARCHz/rest-based-microservices-go-lib v1.2.0 h1:aH1Q54Zx/Nid3jFbdTvZ8LVLDGuzAWQdexrqdMd3KGU=
+github.com/sMARCHz/rest-based-microservices-go-lib v1.2.0/go.mod h1:GJVzGNmIBLczdGGO9kU3ZTdWZizDChMGD4OYqLbgQ2w=
+github.com/sMARCHz/rest-based-microservices-go-lib v1.3.0 h1:lryQ5dJ3WVAK5KrLWrZNxOmOfOUPAEkCSSg2Xv1Fl/Q=
+github.com/sMARCHz/rest-based-microservices-go-lib v1.3.0/go.mod h1:QiuuypaD5Yg+C8U4Y+fOa5CDaqT9CqOeHwrfVniF8tg=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=

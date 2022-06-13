@@ -12,7 +12,8 @@ import (
 
 type AuthService interface {
 	Login(dto.LoginRequest) (*dto.LoginResponse, *errs.AppError)
-	Verify(urlParams map[string]string) *errs.AppError
+	Verify(map[string]string) *errs.AppError
+	Refresh(dto.RefreshTokenRequest) (*dto.LoginResponse, *errs.AppError)
 }
 
 type DefaultAuthService struct {
@@ -21,35 +22,45 @@ type DefaultAuthService struct {
 }
 
 func (a DefaultAuthService) Login(req dto.LoginRequest) (*dto.LoginResponse, *errs.AppError) {
+	if validationErr := req.Validate(); validationErr != nil {
+		return nil, validationErr
+	}
+
+	// Get the user detail in the database
 	var login *domain.Login
 	var appErr *errs.AppError
-	// Get the user detail in the database
 	if login, appErr = a.repo.ValidateUser(req.Username, req.Password); appErr != nil {
 		return nil, appErr
 	}
 
+	// Build claims and authToken for generate token
 	claims := login.ClaimsForAccessToken()
 	authToken := domain.NewAuthToken(claims)
 
-	var accessToken string
-	if accessToken, appErr = authToken.NewAccessToken(); appErr != nil {
+	// Generate access and refresh token
+	var accessToken, refreshToken string
+	if accessToken, appErr = authToken.GenerateAccessToken(); appErr != nil {
 		return nil, appErr
 	}
-	return &dto.LoginResponse{AccessToken: accessToken}, nil
+	if refreshToken, appErr = a.repo.GenerateAndSaveRefreshToken(authToken); appErr != nil {
+		return nil, appErr
+	}
+	return &dto.LoginResponse{AccessToken: accessToken, RefreshToken: refreshToken}, nil
 }
 
 func (a DefaultAuthService) Verify(urlParams map[string]string) *errs.AppError {
-	if err := validateUrlParams(urlParams); err != nil {
-		return err
+	if validationErr := validateUrlParams(urlParams); validationErr != nil {
+		return validationErr
 	}
-	// Parse string to token
+
+	// Parse string in the urlParams to token
 	if jwtToken, err := jwtTokenFromString(urlParams["token"]); err != nil {
 		return errs.NewAuthorizationError(err.Error())
 	} else {
 		if jwtToken.Valid {
-			claims := jwtToken.Claims.(*domain.Claims)
+			claims := jwtToken.Claims.(*domain.AccessTokenClaims)
 			if claims.IsUserRole() {
-				// Check if token is belonged to its user (same customer_id)
+				// Check if token is belonged to its user or not (same customer_id)
 				if !claims.IsRequestVerifiedWithTokenClaims(urlParams) {
 					return errs.NewAuthorizationError("request not verified with the token claims")
 				}
@@ -66,8 +77,33 @@ func (a DefaultAuthService) Verify(urlParams map[string]string) *errs.AppError {
 	}
 }
 
+func (a DefaultAuthService) Refresh(req dto.RefreshTokenRequest) (*dto.LoginResponse, *errs.AppError) {
+	if validationErr := req.Validate(); validationErr != nil {
+		return nil, validationErr
+	}
+
+	// Check if access token is valid
+	if validationErr := req.IsAccessTokenValid(); validationErr != nil {
+		if validationErr.Errors == jwt.ValidationErrorExpired {
+			// If access token expired, check refresh token is existed in the store or not
+			var appErr *errs.AppError
+			if appErr = a.repo.IsRefreshTokenExisted(req.RefreshToken); appErr != nil {
+				return nil, appErr
+			}
+
+			var accessToken string
+			if accessToken, appErr = domain.GenerateAccessTokenFromRefreshToken(req.RefreshToken); appErr != nil {
+				return nil, appErr
+			}
+			return &dto.LoginResponse{AccessToken: accessToken}, nil
+		}
+		return nil, errs.NewAuthenticationError("invalid token")
+	}
+	return nil, errs.NewAuthenticationError("cannot generate new access token until the current one expires")
+}
+
 func jwtTokenFromString(tokenString string) (*jwt.Token, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &domain.Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &domain.AccessTokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(domain.HMAC_SAMPLE_SECRET), nil
 	})
 	if err != nil {
